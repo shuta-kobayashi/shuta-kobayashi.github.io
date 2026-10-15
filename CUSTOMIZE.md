@@ -242,6 +242,38 @@ Enable in frontmatter:
 
 ## 6. Publications (BibTeX)
 
+### Presentations
+
+The `/presentations/` page reuses the publications layout, year grouping, author
+highlighting and material links. Edit `src/data/presentations.bib` to add
+talks or posters; the file includes a commented example. It starts with no records.
+Use `booktitle` for the conference, `year` for grouping, and `additional_info` for
+the date, location, or presentation type. `slides`, `poster`, and `pdf` accept a
+filename relative to `site.publications.pdfDir` or a full URL. `html` links the
+title to an external event page. Presentation entries do not create publication
+detail pages or appear in Selected Publications.
+
+Presentations are grouped into International Conferences and Domestic Conferences
+(Japan), with a continuous list inside each section. Set
+`site.presentations.groupByYear` to `true` to add year headings. Set `keywords = {domestic}` for
+Japanese domestic conferences, or `keywords = {international}` for international
+conferences. Entries without either keyword appear in International Conferences.
+Comma-separated keywords are supported; `domestic` takes precedence. Section
+headings are configured in `site.presentations.sections`; set
+`site.presentations.groupByConference` to `false` for a single conference group.
+
+Within each conference group, `site.presentations.groupByFormat` splits entries
+into Oral and Poster using `abbr = {oral}` or `abbr = {poster}` (case-insensitive).
+Other values appear under Other; empty format groups are hidden. Format grouping
+suppresses year headings. Customize headings in `site.presentations.formats`, or
+set `groupByFormat` to `false` to return to the continuous list.
+
+Set the title, metadata description, empty-state label, and thumbnail/venue-badge flag
+in `site.presentations`. Author display and asset directories follow
+`site.publications`. The header link is configured in `site.navbar.items`.
+
+### Publication records
+
 Edit `src/data/papers.bib`. Standard BibTeX format with extra as-folio fields:
 
 ```bibtex
@@ -324,8 +356,7 @@ publications: {
     abstract: 'Abs',
     bibtex: 'Bib',
     supp: 'Supp',
-    searchPlaceholder: 'Search publications…',
-    noResults: 'No publications match your search.',
+    noResults: 'No publications to display.',
   },
 },
 ```
@@ -413,6 +444,17 @@ The CV page supports two formats — switch with `site.cv.format`.
 
 ### RenderCV format (`src/data/cv.yml`)
 
+`cv.label` displays a title or occupation in the Basics table. Hide it with
+`site.cv.showLabel: false`, or change its row label with `site.cv.labels.label`.
+
+`cv.sections.fellowships` supports `name` (or `title`), `issuer` (or
+`institution`), `start_date` / `end_date` (or a single `date`), `location`,
+`url`, and `highlights`. Fellowships appear in the page and sidebar when
+entries exist. `cv.languages` is a list of language names (for example,
+`[Japanese, English]`) displayed in the contact information table. Toggle these
+with `site.cv.showFellowships` and `site.cv.showLanguages`; customize their labels
+in `site.cv.labels`.
+
 ```yaml
 cv:
   name: Your Name
@@ -426,7 +468,7 @@ cv:
         studyType: PhD
         startDate: '2010-09-01'
         endDate: '2015-06-01'
-    experience:
+    work:
       - company: Your University
         position: Professor
         startDate: '2015-09-01'

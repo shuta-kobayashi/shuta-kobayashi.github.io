@@ -19,6 +19,8 @@ import IconEnvelope from '~icons/fa-solid/envelope';
 import IconFilePdf from '~icons/fa-solid/file-pdf';
 import IconRss from '~icons/fa-solid/rss';
 
+import IconXTwitter from './icons/X.astro';
+
 interface Props {
   /** Additional CSS classes for the container */
   class?: string;
@@ -44,7 +46,7 @@ if (s.x_username) {
   links.push({
     href: `https://x.com/${s.x_username}`,
     label: 'X (Twitter)',
-    Icon: IconTwitter,
+    Icon: IconXTwitter,
   });
 }
 if (s.linkedin_username) {

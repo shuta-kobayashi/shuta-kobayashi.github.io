@@ -19,8 +19,11 @@ const renderCV = format === 'rendercv' ? (yaml.load(cvRaw) as RenderCV) : null;
 const jsonResume = format === 'jsonresume' ? (resumeData as JSONResume) : null;
 
 const rc = renderCV?.cv ?? null;
+const label = site.cv.showLabel ? rc?.label : undefined;
 const education = (rc?.sections?.education ?? []) as RenderCVEntry[];
-const experience = (rc?.sections?.experience ?? []) as RenderCVEntry[];
+const work = (rc?.sections?.work ?? []) as RenderCVEntry[];
+const fellowships = site.cv.showFellowships ? (rc?.sections?.fellowships ?? []) : [];
+const languages = site.cv.showLanguages ? (rc?.languages ?? []) : [];
 const rcPublications = (rc?.sections?.publications ?? []) as RenderCVEntry[];
 const awards = (rc?.sections?.awards ?? []) as RenderCVEntry[];
 const skills = (rc?.sections?.skills ?? []) as RenderCVEntry[];
@@ -34,17 +37,20 @@ type TocItem = { label: string; href: string };
 
 const tocItems: TocItem[] = [];
 if (format === 'rendercv' && rc) {
-  if (rc.name || rc.email || rc.phone) tocItems.push({ label: 'Contact Information', href: '#contact' });
+  if (rc.name || label || rc.email || rc.phone || rc.website || rc.location || languages.length > 0)
+    tocItems.push({ label: site.cv.labels.basics, href: '#contact' });
   if (rc.summary) tocItems.push({ label: 'Professional Summary', href: '#summary' });
   if (education.length > 0) tocItems.push({ label: 'Education', href: '#education' });
-  if (experience.length > 0) tocItems.push({ label: 'Experience', href: '#experience' });
+  if (work.length > 0) tocItems.push({ label: site.cv.labels.work, href: '#work' });
+  if (fellowships.length > 0)
+    tocItems.push({ label: site.cv.labels.fellowships, href: '#fellowships' });
   if (rcPublications.length > 0) tocItems.push({ label: 'Publications', href: '#publications' });
   if (awards.length > 0) tocItems.push({ label: 'Awards', href: '#awards' });
   if (skills.length > 0) tocItems.push({ label: 'Skills', href: '#skills' });
   if (interests.length > 0) tocItems.push({ label: 'Interests', href: '#interests' });
 } else if (format === 'jsonresume' && jr) {
-  if (jr.basics) tocItems.push({ label: 'Contact Information', href: '#contact' });
-  if (jr.work?.length) tocItems.push({ label: 'Experience', href: '#experience' });
+  if (jr.basics) tocItems.push({ label: site.cv.labels.basics, href: '#contact' });
+  if (jr.work?.length) tocItems.push({ label: site.cv.labels.work, href: '#work' });
   if (jr.education?.length) tocItems.push({ label: 'Education', href: '#education' });
   if (jr.publications?.length) tocItems.push({ label: 'Publications', href: '#publications' });
   if (jr.awards?.length) tocItems.push({ label: 'Awards', href: '#awards' });
@@ -94,16 +100,22 @@ if (format === 'rendercv' && rc) {
           <!-- ── RENDERCV ──────────────────────────────────────────────── -->
           {format === 'rendercv' && renderCV && (
             <>
-              {rc && (rc.name || rc.email || rc.phone || rc.website || rc.location) && (
+              {rc && (rc.name || label || rc.email || rc.phone || rc.website || rc.location || languages.length > 0) && (
                 <>
                   <a class="anchor" id="contact"></a>
                   <div class="card mt-3 p-3">
-                    <h3 class="card-title font-weight-medium">Contact Information</h3>
+                    <h3 class="card-title font-weight-medium">{site.cv.labels.basics}</h3>
                     <table class="table table-cv table-sm table-borderless">
                       {rc.name && (
                         <tr>
                           <td class="p-1 pr-2 font-weight-bold"><b>Name</b></td>
                           <td class="p-1 pl-2 font-weight-light">{rc.name}</td>
+                        </tr>
+                      )}
+                      {label && (
+                        <tr>
+                          <td class="p-1 pr-2 font-weight-bold"><b>{site.cv.labels.label}</b></td>
+                          <td class="p-1 pl-2 font-weight-light">{label}</td>
                         </tr>
                       )}
                       {rc.email && (
@@ -130,6 +142,12 @@ if (format === 'rendercv' && rc) {
                           <td class="p-1 pl-2 font-weight-light">
                             <a href={rc.website} target="_blank" rel="noopener noreferrer">{rc.website}</a>
                           </td>
+                        </tr>
+                      )}
+                      {languages.length > 0 && (
+                        <tr>
+                          <td class="p-1 pr-2 font-weight-bold"><b>{site.cv.labels.languages}</b></td>
+                          <td class="p-1 pl-2 font-weight-light">{languages.join(', ')}</td>
                         </tr>
                       )}
                     </table>
@@ -163,16 +181,35 @@ if (format === 'rendercv' && rc) {
                 </CVSection>
               )}
 
-              {experience.length > 0 && (
-                <CVSection title="Experience" id="experience">
+              {work.length > 0 && (
+                <CVSection title={site.cv.labels.work} id="work">
                   <ul class="card-text font-weight-light list-group list-group-flush">
-                    {experience.map((e) => (
+                    {work.map((e) => (
                       <CVEntry
-                        title={e.position ?? ''}
+                        title={e.position ?? e.title ?? ''}
                         subtitle={e.company}
                         location={e.location}
                         dates={formatDateRange(e.start_date, e.end_date)}
                         highlights={e.highlights}
+                      />
+                    ))}
+                  </ul>
+                </CVSection>
+              )}
+
+              {fellowships.length > 0 && (
+                <CVSection title={site.cv.labels.fellowships} id="fellowships">
+                  <ul class="card-text font-weight-light list-group list-group-flush">
+                    {fellowships.map((e) => (
+                      <CVEntry
+                        title={e.name ?? e.title ?? ''}
+                        subtitle={e.issuer ?? e.institution}
+                        location={e.location}
+                        dates={e.date !== undefined
+                          ? formatCVDate(e.date)
+                          : formatDateRange(e.start_date, e.end_date)}
+                        highlights={e.highlights}
+                        url={e.url}
                       />
                     ))}
                   </ul>
@@ -242,7 +279,7 @@ if (format === 'rendercv' && rc) {
                 <>
                   <a class="anchor" id="contact"></a>
                   <div class="card mt-3 p-3">
-                    <h3 class="card-title font-weight-medium">Contact Information</h3>
+                    <h3 class="card-title font-weight-medium">{site.cv.labels.basics}</h3>
                     <table class="table table-cv table-sm table-borderless">
                       {jr.basics.name && (
                         <tr>
@@ -282,7 +319,7 @@ if (format === 'rendercv' && rc) {
               )}
 
               {jr?.work && jr.work.length > 0 && (
-                <CVSection title="Experience" id="experience">
+                <CVSection title={site.cv.labels.work} id="work">
                   <ul class="card-text font-weight-light list-group list-group-flush">
                     {jr.work.map((e) => (
                       <CVEntry

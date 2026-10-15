@@ -1,11 +1,11 @@
 {
   "$schema": "https://raw.githubusercontent.com/jsonresume/resume-schema/v1.0.0/schema.json",
   "basics": {
-    "name": "Albert Einstein",
+    "name": "Shuta Kobayashi",
     "label": "Theoretical Physicist",
-    "email": "einstein@example.com",
+    "email": "kobayashi.shuta.76k@st.kyoto-u.ac.jp",
     "phone": "",
-    "url": "https://example.github.io",
+    "url": "",
     "summary": "Theoretical physicist who developed the theory of relativity. Nobel Prize Laureate in Physics (1921). Known for mass-energy equivalence E = mc².",
     "location": {
       "address": "Einstein Drive",

@@ -402,6 +402,10 @@
   .profile {
     width: 100%;
   }
+  .profile img {
+    width: 100%;
+    height: auto;
+  }
   .profile .more-info {
     margin-bottom: 5px;
     margin-top: 5px;
@@ -775,13 +779,14 @@
   }
   .cv h6.title {
     font-weight: 700;
+    color: var(--global-theme-color);
   }
   .cv h6 a {
-    color: var(--global-text-color);
+    color: var(--global-theme-color);
     text-decoration: none;
   }
   .cv h6 a:hover {
-    color: var(--global-theme-color);
+    color: var(--global-hover-color);
   }
 
   /* CV skill-item (skills, languages, interests) */

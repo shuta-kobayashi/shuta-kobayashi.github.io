@@ -1,9 +1,10 @@
 ---
 import IconFacebook from '~icons/fa-brands/facebook';
 import IconLinkedin from '~icons/fa-brands/linkedin';
-import IconTwitter from '~icons/fa-brands/twitter';
 import IconEnvelope from '~icons/fa-solid/envelope';
 import IconShareAlt from '~icons/fa-solid/share-alt';
+
+import IconXTwitter from '../icons/X.astro';
 
 interface Props {
   title: string;
@@ -23,7 +24,7 @@ const shareLinks = [
   {
     name: 'X (Twitter)',
     href: `https://twitter.com/intent/tweet?text=${enc.title}&url=${enc.url}`,
-    Icon: IconTwitter,
+    Icon: IconXTwitter,
   },
   {
     name: 'LinkedIn',

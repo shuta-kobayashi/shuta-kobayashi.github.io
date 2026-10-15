@@ -18,8 +18,8 @@ import { InspireHEPBadge } from './InspireHEPBadge';
 interface Labels {
   abstract?: string;
   bibtex?: string;
+  arxiv?: string;
   supp?: string;
-  searchPlaceholder?: string;
   noResults?: string;
 }
 
@@ -32,6 +32,8 @@ interface BadgeConfig {
 
 interface Props {
   entries: BibEntry[];
+  /** Show separate lists and headings for each year. */
+  groupByYear?: boolean;
   maxAuthorLimit?: number;
   showThumbnails?: boolean;
   /** Last name to italicise in author lists (case-insensitive). */
@@ -272,7 +274,7 @@ function PublicationEntry({
                 rel="noopener noreferrer"
                 className="btn btn-sm z-depth-0"
               >
-                arXiv
+                {labels.arxiv ?? 'arXiv'}
               </a>
             )}
             {hal && (
@@ -384,11 +386,6 @@ function PublicationEntry({
                 Website
               </a>
             )}
-            {detailBase !== undefined && (
-              <a href={`${detailBase}/publications/${entry.key}/`} className="btn btn-sm z-depth-0">
-                Details
-              </a>
-            )}
           </div>
 
           {/* Metric badges row */}
@@ -448,6 +445,7 @@ function PublicationEntry({
 
 export function BibSearch({
   entries,
+  groupByYear = true,
   maxAuthorLimit = 3,
   showThumbnails = true,
   authorLastName = '',
@@ -460,75 +458,38 @@ export function BibSearch({
   scholarUserId = '',
   badges,
 }: Props) {
-  const [query, setQuery] = useState('');
-
-  const filtered = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    if (!q) return entries;
-    const words = q.split(/\s+/).filter(Boolean);
-    return entries.filter((entry) => {
-      const haystack = [getTitle(entry), getAuthors(entry), getVenue(entry), String(getYear(entry))]
-        .join(' ')
-        .toLowerCase();
-      return words.every((word) => haystack.includes(word));
-    });
-  }, [entries, query]);
-
   const byYear = useMemo(() => {
     const map = new Map<number, BibEntry[]>();
-    for (const entry of filtered) {
+    for (const entry of entries) {
       const year = getYear(entry);
       if (!map.has(year)) map.set(year, []);
       map.get(year)!.push(entry);
     }
     return map;
-  }, [filtered]);
+  }, [entries]);
 
-  const years = useMemo(() => [...byYear.keys()].sort((a, b) => b - a), [byYear]);
+  const groups = groupByYear
+    ? [...byYear.keys()]
+        .sort((a, b) => b - a)
+        .map((year) => ({
+          key: String(year),
+          year,
+          entries: byYear.get(year)!,
+        }))
+    : [{ key: 'all', year: undefined, entries }];
 
   return (
     <div className="publications">
-      {/* Search bar */}
-      <div style={{ marginBottom: '1.5rem' }}>
-        <input
-          type="search"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder={labels.searchPlaceholder ?? 'Search publications\u2026'}
-          style={{
-            width: '100%',
-            padding: '0.5rem 0.75rem',
-            fontSize: '0.9375rem',
-            border: '1px solid var(--global-divider-color)',
-            borderRadius: '6px',
-            color: 'var(--global-text-color)',
-            backgroundColor: 'transparent',
-            outline: 'none',
-          }}
-          aria-label="Search publications"
-        />
-        <p
-          style={{
-            marginTop: '0.375rem',
-            fontSize: '0.8125rem',
-            color: 'var(--global-text-color-light)',
-          }}
-        >
-          Showing {filtered.length} of {entries.length} publication{entries.length !== 1 ? 's' : ''}
-        </p>
-      </div>
-
-      {/* Publications grouped by year */}
-      {filtered.length === 0 ? (
+      {entries.length === 0 ? (
         <p style={{ color: 'var(--global-text-color-light)' }}>
-          {labels.noResults ?? 'No publications match your search.'}
+          {labels.noResults ?? 'No publications to display.'}
         </p>
       ) : (
-        years.map((year) => (
-          <div key={year}>
-            <h2 className="year">{year}</h2>
+        groups.map((group) => (
+          <div key={group.key}>
+            {group.year !== undefined && <h2 className="year">{group.year}</h2>}
             <ol className="bibliography">
-              {byYear.get(year)!.map((entry) => (
+              {group.entries.map((entry) => (
                 <PublicationEntry
                   key={entry.key}
                   entry={entry}

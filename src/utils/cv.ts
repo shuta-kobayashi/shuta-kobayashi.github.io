@@ -34,19 +34,21 @@ export interface RenderCVEntry {
 export interface RenderCV {
   cv: {
     name: string;
+    label?: string;
     location?: string;
     email?: string;
     phone?: string;
     website?: string;
     summary?: string;
+    languages?: string[];
     social_networks?: Array<{ network: string; username: string }>;
     sections: {
       education?: RenderCVEntry[];
-      experience?: RenderCVEntry[];
+      work?: RenderCVEntry[];
+      fellowships?: RenderCVEntry[];
       publications?: RenderCVEntry[];
       awards?: RenderCVEntry[];
       skills?: RenderCVEntry[];
-      languages?: RenderCVEntry[];
       interests?: RenderCVEntry[];
       [key: string]: RenderCVEntry[] | undefined;
     };

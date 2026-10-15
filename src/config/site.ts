@@ -32,7 +32,7 @@ export const site = {
   // ─── Identity ──────────────────────────────────────────────────────────────
 
   /** Site title. Shown in the browser tab and navbar. */
-  title: 'Albert Einstein',
+  title: 'Shuta Kobayashi / 小林秀太',
 
   /** Site description. Used in meta tags. */
   description: 'A simple, clean, and responsive Astro template for academics. Powered by as-folio.',
@@ -44,10 +44,10 @@ export const site = {
 
   author: {
     /** Full name shown in navbar, about page heading, and footer. */
-    name: 'Albert Einstein',
+    name: 'Shuta Kobayashi',
 
     /** Short email address (used in social links). */
-    email: 'einstein@example.com',
+    email: 'kobayashi.shuta.76k@st.kyoto-u.ac.jp',
 
     /** Path to profile photo. Place image in public/assets/img/. */
     avatar: '/assets/img/prof_pic.jpg',
@@ -56,18 +56,15 @@ export const site = {
      * Subtitle below your name on the about page.
      * HTML is supported.
      */
-    subtitle: `Theoretical Physicist
-      &nbsp;·&nbsp;
-      <a href="https://en.wikipedia.org/wiki/Institute_for_Advanced_Study">Institute for Advanced Study</a>,
-      Princeton`,
+    subtitle: `Ph.D. Student at <a href="https://www.kyoto-u.ac.jp/en/">Kyoto University</a>
+              &nbsp;·&nbsp;
+              nonequilibrium statistical mechanics / stochastic thermodynamics / machine learning`,
 
     /**
      * Address block below profile photo.
      * HTML is supported.
      */
-    moreInfo: `<p>Institute for Advanced Study</p>
-      <p>Einstein Drive</p>
-      <p>Princeton, NJ 08540</p>`,
+    moreInfo: `<p>Boltzmann statue, Vienna · October 2026</p>`,
   },
 
   // ─── Social links ──────────────────────────────────────────────────────────
@@ -79,27 +76,27 @@ export const site = {
   //   bluesky_handle, medium_username, cv_pdf, rss_icon
 
   socials: {
-    email: 'einstein@example.com',
-    x_username: undefined as string | undefined,
+    email: 'kobayashi.shuta.76k@st.kyoto-u.ac.jp',
+    x_username: 'ShidAreTree63',
     linkedin_username: undefined as string | undefined,
     github_username: undefined as string | undefined,
     gitlab_username: undefined as string | undefined,
     /** Google Scholar user ID — the part after user= in your Scholar URL */
-    scholar_userid: 'qc6CJjYAAAAJ',
+    scholar_userid: 'KTbu-yAAAAAJ&hl=ja',
     orcid_id: undefined as string | undefined,
     /** Inspire HEP author ID */
-    inspire_id: '1010907',
+    inspire_id: undefined as string | undefined,
     researchgate_username: undefined as string | undefined,
-    arxiv_id: undefined as string | undefined,
+    arxiv_id: 'kobayashi_s_1',
     youtube_id: undefined as string | undefined,
     instagram_username: undefined as string | undefined,
     mastodon_url: undefined as string | undefined,
     bluesky_handle: undefined as string | undefined,
     medium_username: undefined as string | undefined,
     /** Path to CV PDF in public/assets/pdf/ */
-    cv_pdf: '/assets/pdf/example_pdf.pdf',
+    cv_pdf: undefined as string | undefined,
     /** Show RSS icon in social links */
-    rss_icon: true,
+    rss_icon: false,
   },
 
   // ─── Navigation ────────────────────────────────────────────────────────────
@@ -118,19 +115,9 @@ export const site = {
      */
     items: [
       { label: 'about', href: '/' },
-      { label: 'blog', href: '/blog/' },
       { label: 'publications', href: '/publications/' },
-      { label: 'projects', href: '/projects/' },
-      { label: 'repositories', href: '/repositories/' },
+      { label: 'presentations', href: '/presentations/' },
       { label: 'cv', href: '/cv/' },
-      {
-        label: 'more',
-        children: [
-          { label: 'teaching', href: '/teaching/' },
-          { label: 'people', href: '/people/' },
-          { label: 'books', href: '/books/' },
-        ],
-      },
     ] as NavItem[],
   },
 
@@ -142,6 +129,7 @@ export const site = {
      * Leave empty string to hide.
      */
     text: `Powered by <a href="https://github.com/dadangnh/as-folio" target="_blank" rel="noopener noreferrer">as-folio</a>.
+      Inspired by <a href="https://github.com/alshedivat/al-folio" target="_blank" rel="noopener noreferrer">al-folio</a>.
       Hosted by <a href="https://pages.github.com/" target="_blank" rel="noopener noreferrer">GitHub Pages</a>.`,
     /** Show "Last updated" timestamp in footer. */
     lastUpdated: false,
@@ -153,7 +141,7 @@ export const site = {
      * 'normal'  — sits at the natural bottom of page content (only visible when scrolled down)
      * 'hidden'  — footer is not rendered at all
      */
-    position: 'sticky' as 'sticky' | 'normal' | 'hidden',
+    position: 'normal' as 'sticky' | 'normal' | 'hidden',
   },
 
   // ─── CV page ───────────────────────────────────────────────────────────────
@@ -165,8 +153,22 @@ export const site = {
      * 'jsonresume' → reads src/data/resume.json (JSONResume format)
      */
     format: 'rendercv' as 'rendercv' | 'jsonresume',
-    /** Path to CV PDF for the download button in public/assets/pdf/. */
-    pdfPath: '/assets/pdf/example_pdf.pdf',
+    /** Path to CV PDF for the download button in public/assets/pdf/. Leave empty to hide. */
+    pdfPath: '',
+    /** Show fellowship entries from cv.yml when present. */
+    showFellowships: true,
+    /** Show cv.languages in the CV contact information when present. */
+    showLanguages: true,
+    /** Show cv.label as a title or occupation in the Basics table. */
+    showLabel: true,
+    /** Headings and navigation labels for additional CV sections. */
+    labels: {
+      basics: 'Basics',
+      label: 'Label',
+      work: 'Work',
+      fellowships: 'Fellowships',
+      languages: 'Languages',
+    },
   },
 
   // ─── Blog ──────────────────────────────────────────────────────────────────
@@ -367,9 +369,41 @@ export const site = {
     labels: {
       abstract: 'Abs',
       bibtex: 'Bib',
+      arxiv: 'arXiv',
       supp: 'Supp',
-      searchPlaceholder: 'Search publications\u2026',
-      noResults: 'No publications match your search.',
+      noResults: 'No publications to display.',
+    },
+  },
+
+  // ─── Presentations ───────────────────────────────────────────────────────
+
+  presentations: {
+    /** Page title and heading for the presentation list. */
+    title: 'presentations',
+    /** Description used in page metadata. */
+    description: 'Conference presentations and talks.',
+    /** Group presentations by the international/domestic BibTeX keywords. */
+    groupByConference: true,
+    /** Show year headings within conference sections. */
+    groupByYear: false,
+    /** Split each conference section by oral/poster in the BibTeX abbr field. */
+    groupByFormat: true,
+    /** Presentation format headings. */
+    formats: {
+      oral: 'Oral',
+      poster: 'Poster',
+      other: 'Other',
+    },
+    /** Conference section headings. */
+    sections: {
+      international: 'International Conferences',
+      domestic: 'Domestic Conferences (Japan)',
+    },
+    /** Enable thumbnails and venue badges in the presentation list. */
+    thumbnails: false,
+    /** UI labels for the presentation empty state. */
+    labels: {
+      noResults: 'No presentations to display.',
     },
   },
 
