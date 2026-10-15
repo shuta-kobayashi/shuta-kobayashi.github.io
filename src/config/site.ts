@@ -35,7 +35,7 @@ export const site = {
   title: 'Shuta Kobayashi / 小林秀太',
 
   /** Site description. Used in meta tags. */
-  description: 'A simple, clean, and responsive Astro template for academics. Powered by as-folio.',
+  description: 'Personal academic website of Shuta Kobayashi, a Ph.D. student at Kyoto University researching nonequilibrium statistical mechanics, stochastic thermodynamics, and machine learning.',
 
   /** Language code for the site. */
   lang: 'en',
