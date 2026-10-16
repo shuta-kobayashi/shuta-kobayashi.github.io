@@ -57,8 +57,8 @@ export const site = {
      * HTML is supported.
      */
     subtitle: `Ph.D. Student at <a href="https://www.kyoto-u.ac.jp/en/">Kyoto University</a>
-              &nbsp;·&nbsp;
-              nonequilibrium statistical mechanics / stochastic thermodynamics / machine learning`,
+              &nbsp;/&nbsp;
+              nonequilibrium statistical mechanics · stochastic thermodynamics · machine learning`,
 
     /**
      * Address block below profile photo.
@@ -175,8 +175,8 @@ export const site = {
 
   blog: {
     /** Name shown in the blog page heading. */
-    name: 'as-folio',
-    description: 'A simple, clean, and responsive Astro template for academics.',
+    name: 'shuta-kobayashi.github.io',
+    description: 'Personal academic website of Shuta Kobayashi, a Ph.D. student at Kyoto University researching nonequilibrium statistical mechanics, stochastic thermodynamics, and machine learning.',
     /** Number of posts per page. */
     postsPerPage: 5,
     /**
