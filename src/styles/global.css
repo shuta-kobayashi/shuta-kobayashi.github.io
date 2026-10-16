@@ -1399,3 +1399,35 @@ body[data-tooltips] [data-tooltip]:focus-within::before {
     page-break-inside: avoid;
   }
 }
+
+/* Mobile layout */
+@media (max-width: 575px) {
+
+  /* Profile photo */
+  .post article > .profile.float-right {
+    float: none;
+    width: min(75%, 260px);
+    margin: 0 auto 1.5rem;
+    text-align: center;
+  }
+
+  .post article > .profile img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  /* Photo caption */
+  .post article > .profile .more-info {
+    font-family: inherit;
+    font-size: 0.75rem;
+    line-height: 1.4;
+    text-align: center;
+  }
+
+  /* Subtitle */
+  .post-header .desc {
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+}

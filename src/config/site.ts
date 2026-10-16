@@ -56,9 +56,28 @@ export const site = {
      * Subtitle below your name on the about page.
      * HTML is supported.
      */
-    subtitle: `Ph.D. Student at <a href="https://www.kyoto-u.ac.jp/en/">Kyoto University</a>
-              &nbsp;/&nbsp;
-              nonequilibrium statistical mechanics · stochastic thermodynamics · machine learning`,
+    subtitle: `
+      Ph.D. Student at
+      <a href="https://www.kyoto-u.ac.jp/en/">Kyoto University</a>
+
+      <span class="hidden min-[576px]:inline">&nbsp;/&nbsp;</span>
+
+      <span class="block min-[576px]:inline whitespace-nowrap">
+        nonequilibrium statistical mechanics
+      </span>
+
+      <span class="hidden min-[576px]:inline">&nbsp;·&nbsp;</span>
+
+      <span class="block min-[576px]:inline whitespace-nowrap">
+        stochastic thermodynamics
+      </span>
+
+      <span class="hidden min-[576px]:inline">&nbsp;·&nbsp;</span>
+
+      <span class="block min-[576px]:inline whitespace-nowrap">
+        machine learning
+      </span>
+    `,
 
     /**
      * Address block below profile photo.

@@ -40,17 +40,21 @@ const selectedPapers = site.selectedPapers.enabled
 const renderedAnnouncements = await Promise.all(
   allAnnouncements.map(async (item) => ({ item, rendered: await render(item) })),
 );
+
+const [nameEn, nameJa] = site.title.split(' / ');
 ---
 
 <Base isHome={true}>
   <div class="post page-container py-8">
     <header class="post-header">
-      <h1
-        class="post-title"
-        style="font-family: var(--font-sans); color: var(--global-text-color);"
-      >
-        {(site.title as string) === 'blank' ? site.author.name : site.title}
-      </h1>
+    <h1
+      class="post-title"
+      style="font-family: var(--font-sans); color: var(--global-text-color);"
+    >
+      <span>{nameEn}</span>
+      <span class="hidden min-[576px]:inline"> / </span>
+      <span class="block min-[576px]:inline">{nameJa}</span>
+    </h1>
       {
         site.author.subtitle && (
           <p
