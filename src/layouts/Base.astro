@@ -8,6 +8,7 @@ import { site } from '@config/site';
 import { ClientRouter } from 'astro:transitions';
 
 interface Props {
+  lang?: string;
   title?: string;
   description?: string;
   /** OG preview image (absolute URL or path) */
@@ -20,6 +21,7 @@ interface Props {
 }
 
 const {
+  lang = site.lang,
   title = site.author.name,
   description = site.description,
   image = site.og.image || undefined,
@@ -68,7 +70,7 @@ const personJsonLd = isHome ? JSON.stringify({
 ---
 
 <!doctype html>
-<html lang={site.lang} data-theme="light">
+<html lang={lang} data-theme="light">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -76,6 +78,9 @@ const personJsonLd = isHome ? JSON.stringify({
     {(robots || noindex) && <meta name="robots" content={robots ?? 'noindex, nofollow'} />}
 
     <link rel="canonical" href={canonicalURL} />
+    {isHome && site.languages.enabled && site.languages.options.map((option) => (
+      <link rel="alternate" hreflang={option.code} href={new URL(`${site.base}${option.href}`, site.url)} />
+    ))}
     <title>{pageTitle}</title>
 
     <!-- Favicon -->
@@ -219,7 +224,7 @@ const personJsonLd = isHome ? JSON.stringify({
       Skip to main content
     </a>
 
-    <Navbar />
+    <Navbar lang={lang} />
 
     <!-- ⌘K Search (ninja-keys + Pagefind) — persisted across View Transitions -->
     {site.features.search && <SearchTrigger transition:persist />}

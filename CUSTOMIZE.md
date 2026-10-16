@@ -49,6 +49,10 @@ source of truth for them.
 
 ### Local development
 
+Vite dependency caches are separated by `NODE_ENV` in `astro.config.mjs`
+(`node_modules/.vite-development` and `node_modules/.vite-production`). This keeps
+`yarn build` from invalidating React dependencies used by a running `yarn dev`.
+
 Copy `.env.example` to `.env`, then set:
 
 ```dotenv
@@ -81,6 +85,36 @@ The deploy workflow reads those variables and passes them to the Astro build.
 ---
 
 ## 2. Site identity
+
+### Header language switch
+
+Set `site.languages.enabled` to show or hide the language link in the desktop and
+mobile header. Configure their labels, accessible names, and site-relative homepage
+paths in `site.languages.options`; the deployment base is prepended automatically.
+Only the other language is shown: EN on Japanese pages and JA on English pages.
+
+The English homepage is `/` and the Japanese homepage is `/ja/`. Edit their bios in
+`src/data/about.mdx` and `src/data/about.ja.mdx`. Japanese metadata, subtitle, photo
+caption, and news heading are configured in `site.languages.japanese`. Both versions
+share the homepage layout. Announcements display in the page language, with full
+lists at `/news/` and `/ja/news/`. Japanese copies of publications (including detail
+pages) and presentations use the same bibliography data and preserve the English
+page contents at `/ja/publications/` and `/ja/presentations/`.
+Japanese presentation category headings are configured in
+`site.languages.japanese.presentations.sections` (international/domestic) and
+`.formats` (oral/poster/other). Set `.localizedHeadings` to `false` to reuse the
+English headings. Bibliography entries remain shared between languages.
+The language link keeps the current page when switching between these pages, CV,
+news, and home; other pages fall back to the language homepage.
+
+Set `site.navbar.localized` to enable Japanese menu labels and links, configured in
+`site.navbar.japaneseItems`. Header control labels are in `site.navbar.labels`.
+The Japanese CV at `/ja/cv/` uses `src/data/cv.ja.yml` (RenderCV format), with
+headings and interface copy in `site.cv.japaneseLabels`. Keep this translation in
+sync with `src/data/cv.yml` when updating your CV. Set `site.cv.localized` to false
+to show the configured English CV data on both versions. Japanese CV dates use
+Japanese formatting; quote year-month values as `"2026-04"` and use `present` for
+ongoing entries.
 
 Edit `src/config/site.ts`:
 
@@ -620,6 +654,15 @@ Announcement text here. HTML and Markdown are supported.
 ```
 
 Announcements appear on the About page (if `site.announcements.enabled: true`) and on the dedicated `/news` page.
+
+Set `site.announcements.localized` to `true` to filter announcements by the page
+language on both homepages and the full news lists. Existing files default to
+`lang: en`. Add Japanese translations in `src/content/announcements/ja/` with
+`lang: ja` and the same `date`, `pinned`, and `hidden` values as their English
+counterparts. Each translation is a separate Markdown or MDX entry. Entries without
+a translation are omitted from the other language's list. Set `localized: false`
+to display English entries on both versions. Configure news page titles,
+descriptions, and empty messages in `site.announcements.labels`.
 
 ---
 

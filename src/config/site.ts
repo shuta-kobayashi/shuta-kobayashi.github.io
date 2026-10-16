@@ -35,10 +35,41 @@ export const site = {
   title: 'Shuta Kobayashi / 小林秀太',
 
   /** Site description. Used in meta tags. */
-  description: 'Personal academic website of Shuta Kobayashi, a Ph.D. student at Kyoto University researching nonequilibrium statistical mechanics, stochastic thermodynamics, and machine learning.',
+  description:
+    'Personal academic website of Shuta Kobayashi, a Ph.D. student at Kyoto University researching nonequilibrium statistical mechanics, stochastic thermodynamics, and machine learning.',
 
   /** Language code for the site. */
   lang: 'en',
+
+  /** Header language switch and Japanese homepage content. */
+  languages: {
+    /** Show a link to the other language in the header (JA or EN). */
+    enabled: true,
+    label: 'Language / 言語',
+    options: [
+      { code: 'ja', label: 'JA', name: '日本語', href: '/ja/' },
+      { code: 'en', label: 'EN', name: 'English', href: '/' },
+    ],
+    japanese: {
+      /** Metadata and headings for Japanese copies of the bibliography pages. */
+      publications: { title: '論文', description: '研究論文とプレプリント' },
+      presentations: {
+        title: '発表',
+        description: '学会発表と講演',
+        /** Use Japanese conference and presentation format headings. */
+        localizedHeadings: true,
+        /** Conference category headings for the Japanese presentations page. */
+        sections: { international: '国際学会', domestic: '国内学会' },
+        /** Presentation format headings for the Japanese presentations page. */
+        formats: { oral: '口頭発表', poster: 'ポスター発表', other: 'その他' },
+      },
+      description:
+        '京都大学大学院理学研究科の博士課程に在籍する小林秀太の個人ウェブサイト。非平衡統計力学、確率熱力学、機械学習を研究しています。',
+      subtitle: '京都大学大学院 博士課程 / 非平衡統計力学 · 確率熱力学 · 機械学習',
+      photoCaption: 'ボルツマン像、ウィーン · 2026年10月',
+      news: 'ニュース',
+    },
+  },
 
   // ─── Author ────────────────────────────────────────────────────────────────
 
@@ -121,6 +152,27 @@ export const site = {
   // ─── Navigation ────────────────────────────────────────────────────────────
 
   navbar: {
+    /** Header control labels for each language. */
+    labels: {
+      en: {
+        search: 'Search',
+        placeholder: 'Search…',
+        menu: 'Toggle navigation',
+        theme: 'Toggle theme',
+      },
+      ja: { search: '検索', placeholder: '検索…', menu: 'メニューを開閉', theme: '配色を切り替え' },
+    },
+    /** Use Japanese navigation labels and routes on Japanese pages. */
+    localized: true,
+    /** Navigation shown on Japanese pages when localized is enabled. */
+    japaneseItems: [
+      { label: 'ホーム', href: '/ja/' },
+      { label: '論文', href: '/ja/publications/' },
+      { label: '発表', href: '/ja/presentations/' },
+      { label: '経歴', href: '/ja/cv/' },
+    ] as NavItem[],
+    /** News section link label on the English homepage. */
+    newsLabel: 'news',
     /** Fix navbar to top of viewport. */
     fixed: true,
     /** Show social icons in navbar (about page only). */
@@ -166,6 +218,35 @@ export const site = {
   // ─── CV page ───────────────────────────────────────────────────────────────
 
   cv: {
+    /** Use the Japanese RenderCV data and labels on /ja/cv/. */
+    localized: true,
+    /** Japanese CV headings, metadata, and interface labels. */
+    japaneseLabels: {
+      title: '経歴',
+      description: '学歴・職歴・研究支援',
+      basics: '基本情報',
+      label: '所属・身分',
+      work: '職歴',
+      fellowships: '研究支援・フェローシップ',
+      languages: '言語',
+      name: '氏名',
+      email: 'メールアドレス',
+      phone: '電話番号',
+      location: '所在地',
+      website: 'ウェブサイト',
+      summary: '概要',
+      education: '学歴',
+      publications: '論文',
+      selectedPublications: '主要論文',
+      awards: '受賞',
+      honors: '栄誉・受賞',
+      skills: 'スキル',
+      interests: '関心分野',
+      download: '経歴PDFをダウンロード',
+      sections: '経歴の項目',
+      present: '現在',
+      areaSeparator: '・',
+    },
     /**
      * Which CV data format to render.
      * 'rendercv' → reads src/data/cv.yml (RenderCV YAML format)
@@ -182,6 +263,25 @@ export const site = {
     showLabel: true,
     /** Headings and navigation labels for additional CV sections. */
     labels: {
+      title: 'cv',
+      description: 'Curriculum vitae',
+      name: 'Name',
+      email: 'Email',
+      phone: 'Phone',
+      location: 'Location',
+      website: 'Website',
+      summary: 'Professional Summary',
+      education: 'Education',
+      publications: 'Publications',
+      selectedPublications: 'Selected Publications',
+      awards: 'Awards',
+      honors: 'Honors & Awards',
+      skills: 'Skills',
+      interests: 'Interests',
+      download: 'Download CV PDF',
+      sections: 'CV sections',
+      present: 'Present',
+      areaSeparator: ' in ',
       basics: 'Basics',
       label: 'Label',
       work: 'Work',
@@ -195,7 +295,8 @@ export const site = {
   blog: {
     /** Name shown in the blog page heading. */
     name: 'shuta-kobayashi.github.io',
-    description: 'Personal academic website of Shuta Kobayashi, a Ph.D. student at Kyoto University researching nonequilibrium statistical mechanics, stochastic thermodynamics, and machine learning.',
+    description:
+      'Personal academic website of Shuta Kobayashi, a Ph.D. student at Kyoto University researching nonequilibrium statistical mechanics, stochastic thermodynamics, and machine learning.',
     /** Number of posts per page. */
     postsPerPage: 5,
     /**
@@ -225,6 +326,17 @@ export const site = {
   // ─── About page sections ──────────────────────────────────────────────────
 
   announcements: {
+    /** Display announcements in the page language; false uses English on all pages. */
+    localized: true,
+    /** Metadata and empty-state copy for each news page. */
+    labels: {
+      en: { title: 'News', description: 'News and announcements', empty: 'No announcements yet.' },
+      ja: {
+        title: '活動報告とお知らせ',
+        description: '活動報告とお知らせ',
+        empty: 'お知らせはまだありません。',
+      },
+    },
     /** Show news/announcements section on the about page. */
     enabled: true,
     /** Enable vertical scroll if more than 3 items. */
@@ -357,6 +469,8 @@ export const site = {
   // ─── Publications ─────────────────────────────────────────────────────────
 
   publications: {
+    /** Heading shown on the English publications page. */
+    title: 'publications',
     /**
      * Show badges for individual publication entries.
      * Can be disabled globally here; also toggleable per entry in BibTeX.

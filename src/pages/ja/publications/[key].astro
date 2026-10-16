@@ -1,0 +1,13 @@
+---
+import PublicationDetailPage from '@components/PublicationDetailPage.astro';
+import bibRaw from '@data/papers.bib?raw';
+import { parseBibtex } from '@utils/bibtex';
+
+export function getStaticPaths() {
+  return parseBibtex(bibRaw).map((entry) => ({ params: { key: entry.key }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+---
+
+<PublicationDetailPage entry={entry} lang="ja" />

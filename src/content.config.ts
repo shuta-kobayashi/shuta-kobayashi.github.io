@@ -159,6 +159,8 @@ const teaching = defineCollection({
 const announcements = defineCollection({
   loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/announcements' }),
   schema: z.object({
+    /** Content language; existing announcements default to English. */
+    lang: z.enum(['en', 'ja']).optional().default('en'),
     date: z.coerce.date(),
     /** Pin this announcement to the top. */
     pinned: z.boolean().optional().default(false),

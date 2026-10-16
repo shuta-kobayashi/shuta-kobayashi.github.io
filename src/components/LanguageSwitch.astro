@@ -1,0 +1,58 @@
+---
+import { site } from '@config/site';
+import { languageHref } from '@utils/languages';
+
+interface Props {
+  lang: string;
+}
+
+const { lang } = Astro.props;
+---
+
+{
+  site.languages.enabled && (
+    <div class="language-switch" role="group" aria-label={site.languages.label}>
+      {site.languages.options
+        .filter((option) => option.code !== lang)
+        .map((option) => (
+          <a
+            href={languageHref(Astro.url.pathname, option.code)}
+            lang={option.code}
+            hreflang={option.code}
+            aria-label={option.name}
+          >
+            {option.label}
+          </a>
+        ))}
+    </div>
+  )
+}
+
+<style>
+  .language-switch {
+    display: flex;
+    align-items: center;
+    margin-inline: 0.35rem;
+    white-space: nowrap;
+    font-size: 0.8rem;
+    color: var(--global-text-color-light);
+  }
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2rem;
+    padding-inline: 0.15rem;
+    color: var(--global-text-color-light);
+    text-decoration: none;
+  }
+
+  a:hover {
+    color: var(--global-theme-color);
+  }
+
+  a:focus-visible {
+    outline: 2px solid var(--global-theme-color);
+    outline-offset: 2px;
+  }
+</style>

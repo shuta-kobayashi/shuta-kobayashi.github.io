@@ -1,0 +1,128 @@
+---
+import BibSearch from '@components/publications/BibSearch.tsx';
+import { site } from '@config/site';
+import Page from '@layouts/Page.astro';
+import type { CoauthorMap } from '@utils/authors';
+import { withBase } from '@utils/base';
+import { getYear, parseBibtex } from '@utils/bibtex';
+import yaml from 'js-yaml';
+
+import coauthorsRaw from '../data/coauthors.yml?raw';
+import bibRaw from '../data/presentations.bib?raw';
+
+interface Props {
+  lang?: 'en' | 'ja';
+}
+
+const { lang = 'en' } = Astro.props;
+const entries = parseBibtex(bibRaw).sort((a, b) => getYear(b) - getYear(a));
+const coauthors = (yaml.load(coauthorsRaw) ?? {}) as CoauthorMap;
+const { presentations, publications } = site;
+const japanese = site.languages.japanese.presentations;
+const headings = lang === 'ja' && japanese.localizedHeadings ? japanese : presentations;
+const isDomestic = (entry: (typeof entries)[number]) =>
+  (entry.fields.keywords ?? '')
+    .split(',')
+    .some((keyword) => keyword.trim().toLowerCase() === 'domestic');
+const groups = presentations.groupByConference
+  ? [
+      {
+        id: 'international',
+        title: headings.sections.international,
+        entries: entries.filter((entry) => !isDomestic(entry)),
+      },
+      {
+        id: 'domestic',
+        title: headings.sections.domestic,
+        entries: entries.filter(isDomestic),
+      },
+    ]
+  : [{ id: 'all', title: '', entries }];
+const groupedPresentations = groups.map((group) => ({
+  ...group,
+  formats: presentations.groupByFormat
+    ? Object.entries(headings.formats)
+        .map(([format, title]) => ({
+          id: `${group.id}-${format}`,
+          title,
+          entries: group.entries.filter((entry) => {
+            const value = (entry.fields.abbr ?? '').trim().toLowerCase();
+            return format === 'other' ? value !== 'oral' && value !== 'poster' : value === format;
+          }),
+        }))
+        .filter((format) => format.entries.length > 0)
+    : [{ id: group.id, title: '', entries: group.entries }],
+}));
+---
+
+<Page
+  lang={lang}
+  title={lang === 'ja' ? site.languages.japanese.presentations.title : presentations.title}
+  description={lang === 'ja'
+    ? site.languages.japanese.presentations.description
+    : presentations.description}
+>
+  <div class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        {lang === 'ja' ? site.languages.japanese.presentations.title : presentations.title}
+      </h1>
+    </header>
+    <article>
+      {
+        groupedPresentations.map((group) => (
+          <section aria-labelledby={group.title ? group.id : undefined}>
+            {group.title && (
+              <h2 id={group.id} class="conference-heading">
+                {group.title}
+              </h2>
+            )}
+            {group.formats.length === 0 && <p>{presentations.labels.noResults}</p>}
+            {group.formats.map((format) => (
+              <div>
+                {format.title && (
+                  <h3 id={format.id} class="format-heading">
+                    {format.title}
+                  </h3>
+                )}
+                <BibSearch
+                  client:load
+                  entries={format.entries}
+                  groupByYear={!presentations.groupByFormat && presentations.groupByYear}
+                  maxAuthorLimit={publications.maxAuthorLimit}
+                  showThumbnails={presentations.thumbnails}
+                  authorLastName={
+                    publications.authorLastName ?? site.author.name.split(' ').pop() ?? ''
+                  }
+                  previewDir={withBase(publications.previewDir)}
+                  pdfDir={withBase(publications.pdfDir)}
+                  labels={{ ...publications.labels, ...presentations.labels }}
+                  coauthors={coauthors}
+                />
+              </div>
+            ))}
+          </section>
+        ))
+      }
+    </article>
+  </div>
+</Page>
+
+<style>
+  .post-header {
+    padding-bottom: 1rem;
+  }
+
+  .format-heading {
+    font-size: 1.25rem;
+    color: var(--global-theme-color);
+    margin: 1.5rem 0 0.25rem;
+  }
+
+  .conference-heading {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--global-divider-color);
+  }
+</style>

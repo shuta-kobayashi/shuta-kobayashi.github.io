@@ -1,4 +1,12 @@
 ---
+import { site } from '@config/site';
+
+interface Props {
+  label?: string;
+}
+
+const { label = site.navbar.labels.en.theme } = Astro.props;
+
 // ThemeToggle — simple light ↔ dark toggle.
 // Uses data-attributes so both desktop and mobile instances work correctly.
 // Initial state is set by the FOUC inline script in Base.astro (respects OS preference).
@@ -6,8 +14,8 @@
 
 <button
   data-light-toggle
-  title="Toggle theme"
-  aria-label="Toggle theme"
+  title={label}
+  aria-label={label}
   style="padding: 0; border: 0; background-color: inherit; color: var(--global-text-color); width: 2rem; height: 2rem; display: inline-flex; align-items: center; justify-content: center; cursor: pointer;"
 >
   <!-- Moon icon: shown in light mode (click to go dark) -->

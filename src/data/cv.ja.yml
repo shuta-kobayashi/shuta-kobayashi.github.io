@@ -1,0 +1,58 @@
+# 日本語版の経歴。英語版は cv.yml で管理します。
+cv:
+  name: 小林 秀太
+  location: 日本・京都
+  email: kobayashi.shuta.76k@st.kyoto-u.ac.jp
+  label: 博士後期課程学生
+  languages:
+    - 日本語（母語）
+    - 英語（上級）
+
+  sections:
+    education:
+      - institution: 京都大学大学院 理学研究科 物理学・宇宙物理学専攻
+        degree: 博士後期課程 在学中
+        start_date: 2026
+        end_date: present
+      - institution: 京都大学大学院 理学研究科 物理学・宇宙物理学専攻
+        degree: 修士（理学）
+        start_date: 2024
+        end_date: 2026
+      - institution: 北海道大学 理学部 物理学科
+        degree: 学士（理学）
+        start_date: 2022
+        end_date: 2024
+      - institution: 慶應義塾大学 環境情報学部
+        degree: 学士課程（学位取得なし）
+        start_date: 2019
+        end_date: 2022
+      - institution: 兵庫県立加古川東高等学校 理数科
+        start_date: 2016
+        end_date: 2019
+
+    work:
+      - company: 京都大学
+        position: TA（ティーチングアシスタント）
+        start_date: "2024-04"
+        end_date: present
+      - company: ZEN大学
+        position: 教材開発アシスタント
+        start_date: "2023-12"
+        end_date: "2024-03"
+        highlights:
+          - 大学生向けの数学教材を開発
+      - company: N Code Labo
+        position: 講師
+        start_date: "2019-06"
+        end_date: "2024-04"
+        highlights:
+          - 高校生にプログラミングと数学を指導
+
+    fellowships:
+      - name: 機構次世代AIプログラム (JST BOOST)
+        issuer: 京都大学
+        start_date: "2026-04"
+        end_date: "2029-03"
+        url: https://www.kugd.k.kyoto-u.ac.jp/en/support/
+        highlights:
+          - "研究課題：情報熱力学に基づく機械学習の理論解析と設計（研究費：年額90万円、生活費相当額：月額25万円）"

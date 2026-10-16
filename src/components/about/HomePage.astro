@@ -1,0 +1,139 @@
+---
+import ProfilePhoto from '@components/about/ProfilePhoto.astro';
+import SocialLinks from '@components/SocialLinks.astro';
+import { site } from '@config/site';
+import Base from '@layouts/Base.astro';
+import { getAnnouncements } from '@utils/announcements';
+import { render } from 'astro:content';
+
+import AboutContentJa from '../../data/about.ja.mdx';
+import AboutContentEn from '../../data/about.mdx';
+
+interface Props {
+  lang?: 'en' | 'ja';
+}
+
+const { lang = 'en' } = Astro.props;
+const isJapanese = lang === 'ja';
+const AboutContent = isJapanese ? AboutContentJa : AboutContentEn;
+const subtitle = isJapanese ? site.languages.japanese.subtitle : site.author.subtitle;
+
+// Announcements
+const allAnnouncements = site.announcements.enabled
+  ? (await getAnnouncements(lang)).slice(0, site.announcements.limit)
+  : [];
+
+const formatDate = (d: Date) =>
+  d.toLocaleDateString(isJapanese ? 'ja-JP' : 'en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    timeZone: 'UTC',
+  });
+
+// Pre-render announcement content
+const renderedAnnouncements = await Promise.all(
+  allAnnouncements.map(async (item) => ({ item, rendered: await render(item) })),
+);
+
+const [nameEn, nameJa] = site.title.split(' / ');
+---
+
+<Base
+  isHome={true}
+  lang={lang}
+  description={isJapanese ? site.languages.japanese.description : site.description}
+>
+  <div class="post page-container py-8">
+    <header class="post-header">
+      <h1
+        class="post-title"
+        style="font-family: var(--font-sans); color: var(--global-text-color);"
+      >
+        <span>{nameEn}</span>
+        <span class="hidden min-[576px]:inline"> / </span>
+        <span class="block min-[576px]:inline">{nameJa}</span>
+      </h1>
+      {
+        subtitle && (
+          <p class="desc" style="color: var(--global-text-color-light);" set:html={subtitle} />
+        )
+      }
+    </header>
+
+    <article>
+      <!-- Profile photo (floats right by default) -->
+      <ProfilePhoto
+        align="right"
+        caption={isJapanese ? site.languages.japanese.photoCaption : undefined}
+      />
+
+      <div class="clearfix">
+        <!-- Bio content from about.mdx -->
+        <div class="prose max-w-none">
+          <AboutContent />
+        </div>
+      </div>
+
+      <!-- Social icons -->
+      {
+        site.socials && (
+          <div class="social mt-6">
+            <div class="contact-icons">
+              <SocialLinks size={28} />
+            </div>
+          </div>
+        )
+      }
+
+      <!-- Announcements / News -->
+      {
+        site.announcements.enabled && allAnnouncements.length > 0 && (
+          <section class="mt-8">
+            <h2 style="color: var(--global-text-color); border-bottom: 1px solid var(--global-divider-color); padding-bottom: 0.3rem;">
+              <a
+                href={`${site.base}${isJapanese ? '/ja' : ''}/news/`}
+                style="color: inherit; text-decoration: none;"
+              >
+                {isJapanese ? site.languages.japanese.news : site.navbar.newsLabel}
+              </a>
+            </h2>
+            <div class={site.announcements.scrollable ? 'scrollable-list' : ''}>
+              <table style="width: 100%; border-collapse: collapse;">
+                <tbody>
+                  {renderedAnnouncements.map(({ item, rendered: { Content } }) => (
+                    <tr style="border-bottom: 1px solid var(--global-divider-color);">
+                      <td style="padding: 0.5rem 1rem 0.5rem 0; white-space: nowrap; vertical-align: top; color: var(--global-text-color-light); font-size: 0.8rem;">
+                        {formatDate(item.data.date)}
+                      </td>
+                      <td style="padding: 0.5rem 0; font-size: 0.9rem; color: var(--global-text-color);">
+                        <Content />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
+        )
+      }
+    </article>
+  </div>
+</Base>
+
+<style>
+  .clearfix::after {
+    content: '';
+    display: table;
+    clear: both;
+  }
+  .post-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+  }
+  .desc {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+</style>

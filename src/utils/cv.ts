@@ -138,8 +138,11 @@ export interface JSONResume {
 // ─── Utilities ───────────────────────────────────────────────────────────────
 
 /** Format a date string or number as "Month Year" or just "Year". */
-export function formatCVDate(d: string | number | undefined): string {
-  if (!d || d === 'present') return d === 'present' ? 'Present' : '';
+export function formatCVDate(
+  d: string | number | undefined,
+  options: { locale?: string; presentLabel?: string } = {},
+): string {
+  if (!d || d === 'present') return d === 'present' ? (options.presentLabel ?? 'Present') : '';
   const str = String(d);
   // ISO: 2025-01 or 2025-01-01
   const isoMatch = str.match(/^(\d{4})(?:-(\d{2}))?/);
@@ -147,9 +150,12 @@ export function formatCVDate(d: string | number | undefined): string {
     const [, year, month] = isoMatch;
     if (month) {
       const date = new Date(Number(year), Number(month) - 1);
-      return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short' });
+      return date.toLocaleDateString(options.locale ?? 'en-US', {
+        year: 'numeric',
+        month: 'short',
+      });
     }
-    return year;
+    return options.locale === 'ja-JP' ? `${year}年` : year;
   }
   return str;
 }
@@ -158,9 +164,11 @@ export function formatCVDate(d: string | number | undefined): string {
 export function formatDateRange(
   start: string | number | undefined,
   end: string | number | undefined,
+  options: { locale?: string; presentLabel?: string } = {},
 ): string {
-  const s = formatCVDate(start);
-  const e = end === 'present' || !end ? 'Present' : formatCVDate(end);
+  const s = formatCVDate(start, options);
+  const e =
+    end === 'present' || !end ? (options.presentLabel ?? 'Present') : formatCVDate(end, options);
   if (!s && !e) return '';
   if (!s) return e;
   if (!e || s === e) return s;

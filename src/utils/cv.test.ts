@@ -3,6 +3,14 @@ import { describe, expect, it } from 'vitest';
 import { formatCVDate, formatDateRange } from './cv';
 
 describe('formatCVDate', () => {
+  it('formats Japanese dates and the ongoing label', () => {
+    const options = { locale: 'ja-JP', presentLabel: '現在' };
+    expect(formatCVDate('2024-04', options)).toBe('2024年4月');
+    expect(formatCVDate(2026, options)).toBe('2026年');
+    expect(formatCVDate('present', options)).toBe('現在');
+    expect(formatDateRange('2024-04', 'present', options)).toBe('2024年4月 – 現在');
+    expect(formatDateRange('2024-04', undefined, options)).toBe('2024年4月 – 現在');
+  });
   it('formats ISO year-month string', () => {
     expect(formatCVDate('2024-03')).toMatch(/Mar 2024/);
   });

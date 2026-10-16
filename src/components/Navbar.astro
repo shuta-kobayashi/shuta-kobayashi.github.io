@@ -2,7 +2,16 @@
 import type { NavDropdown, NavItem, NavLeaf } from '@config/site';
 import { site } from '@config/site';
 
+import LanguageSwitch from './LanguageSwitch.astro';
 import ThemeToggle from './ThemeToggle.astro';
+
+interface Props {
+  lang?: string;
+}
+
+const { lang = site.lang } = Astro.props;
+const labels = site.navbar.labels[lang === 'ja' && site.navbar.localized ? 'ja' : 'en'];
+const homeHref = site.languages.options.find((option) => option.code === lang)?.href ?? '/';
 
 // ── Type helpers ───────────────────────────────────────────────────────────
 function isLeaf(item: NavItem): item is NavLeaf {
@@ -17,7 +26,8 @@ const pathname = Astro.url.pathname;
 
 function isActive(href: string): boolean {
   const full = `${site.base}${href}`;
-  if (href === '/') return pathname === full || pathname === site.base;
+  if (href === '/' || href === homeHref)
+    return pathname === `${site.base}${homeHref}` || pathname === site.base;
   return pathname.startsWith(full);
 }
 
@@ -25,7 +35,8 @@ function hasActiveChild(item: NavDropdown): boolean {
   return item.children.some((c) => isActive(c.href));
 }
 
-const items = site.navbar.items;
+const items =
+  lang === 'ja' && site.navbar.localized ? site.navbar.japaneseItems : site.navbar.items;
 ---
 
 <nav
@@ -38,7 +49,7 @@ const items = site.navbar.items;
   >
     <!-- Brand -->
     <a
-      href={`${site.base}/`}
+      href={`${site.base}${homeHref}`}
       class="text-lg font-bold"
       style="color: var(--global-text-color); text-decoration: none;"
     >
@@ -53,7 +64,7 @@ const items = site.navbar.items;
             const active = isActive(item.href);
             return (
               <a
-                href={`${site.base}${item.href}`}
+                href={`${site.base}${item.href === '/' ? homeHref : item.href}`}
                 class={`px-3 py-1 text-sm transition-colors ${active ? 'font-bold' : ''}`}
                 style={`color: ${active ? 'var(--global-theme-color)' : 'var(--global-text-color)'}; text-decoration: none;`}
               >
@@ -124,8 +135,8 @@ const items = site.navbar.items;
       <button
         id="search-toggle"
         class="search-pill"
-        aria-label="Search"
-        title="Search"
+        aria-label={labels.search}
+        title={labels.search}
         type="button"
       >
         <svg
@@ -144,18 +155,20 @@ const items = site.navbar.items;
           <circle cx="11" cy="11" r="8"></circle>
           <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
         </svg>
-        <span class="search-pill-text">Search…</span>
+        <span class="search-pill-text">{labels.placeholder}</span>
         <kbd class="search-kbd">⌘K</kbd>
       </button>
 
-      <ThemeToggle />
+      <LanguageSwitch lang={lang} />
+      <ThemeToggle label={labels.theme} />
     </div>
 
     <!-- Mobile controls (icon-only search + theme + hamburger) -->
     <div class="flex items-center gap-2 md:hidden">
+      <LanguageSwitch lang={lang} />
       <button
         id="search-toggle"
-        aria-label="Search"
+        aria-label={labels.search}
         type="button"
         style="padding: 0; border: 0; background: inherit; color: var(--global-text-color); cursor: pointer;"
       >
@@ -175,11 +188,11 @@ const items = site.navbar.items;
           <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
         </svg>
       </button>
-      <ThemeToggle />
+      <ThemeToggle label={labels.theme} />
       <button
         id="navbar-toggler"
         class="navbar-toggler collapsed"
-        aria-label="Toggle navigation"
+        aria-label={labels.menu}
         aria-expanded="false"
         type="button"
         style="padding: 0.25rem; border: 0; background: inherit; cursor: pointer;"
@@ -212,7 +225,7 @@ const items = site.navbar.items;
           const active = isActive(item.href);
           return (
             <a
-              href={`${site.base}${item.href}`}
+              href={`${site.base}${item.href === '/' ? homeHref : item.href}`}
               class="block px-4 py-2 text-sm"
               style={`color: ${active ? 'var(--global-theme-color)' : 'var(--global-text-color)'}; font-weight: ${active ? '700' : '400'}; text-decoration: none;`}
             >
@@ -414,6 +427,17 @@ const items = site.navbar.items;
     color: var(--global-text-color-light);
     font-family: var(--font-mono, monospace);
     white-space: nowrap;
+  }
+
+  @media (min-width: 768px) and (max-width: 1023px) {
+    .search-pill {
+      width: auto;
+    }
+
+    .search-pill .search-pill-text,
+    .search-pill .search-kbd {
+      display: none;
+    }
   }
 </style>
 

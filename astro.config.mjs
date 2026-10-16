@@ -96,6 +96,8 @@ export default defineConfig({
     }),
   ],
   vite: {
+    // Keep builds from invalidating the dependency cache of a running dev server.
+    cacheDir: `node_modules/.vite-${process.env.NODE_ENV ?? 'development'}`,
     // Icons are provided by unplugin-icons: each icon is a static
     // `~icons/<collection>/<name>` import compiled to a zero-JS inline SVG.
     // An unknown icon name fails the build (unresolved import) instead of a
