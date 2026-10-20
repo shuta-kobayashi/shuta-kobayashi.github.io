@@ -10,7 +10,7 @@ export interface AuthorLink {
   name: string;
   /** Profile URL from coauthors.yml, if matched. */
   url?: string;
-  /** True when the last name matches the site owner's configured last name. */
+  /** True when the author matches the configured owner surname or full-name aliases. */
   isSelf: boolean;
 }
 
@@ -45,13 +45,18 @@ function normalizeForMatch(str: string): string {
  * @param authorList      Names in "First Last" format (output of getAuthors()).
  * @param coauthors       Parsed coauthors.yml data.
  * @param authorLastName  Site owner's last name for self-identification.
+ * @param authorAliases   Alternate full names; whitespace is ignored when matching.
  */
 export function linkAuthors(
   authorList: string[],
   coauthors: CoauthorMap,
   authorLastName: string,
+  authorAliases: readonly string[] = [],
 ): AuthorLink[] {
   const normOwner = normalizeForMatch(authorLastName);
+  const aliases = new Set(
+    authorAliases.map((name) => normalizeForMatch(name).replace(/\s+/g, '')).filter(Boolean),
+  );
   return authorList.map((author) => {
     const parts = author.trim().split(/\s+/);
     if (parts.length === 0) return { name: author, isSelf: false };
@@ -59,7 +64,9 @@ export function linkAuthors(
     const last = parts[parts.length - 1];
     const normLast = normalizeForMatch(last);
 
-    const isSelf = normOwner !== '' && normLast === normOwner;
+    const isSelf =
+      (normOwner !== '' && normLast === normOwner) ||
+      aliases.has(normalizeForMatch(author).replace(/\s+/g, ''));
 
     // Find coauthor entry: exact key first, then accent-normalized fallback
     const entry: CoauthorEntry | undefined =

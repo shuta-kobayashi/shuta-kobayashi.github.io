@@ -10,6 +10,21 @@ const coauthors: CoauthorMap = {
 };
 
 describe('linkAuthors', () => {
+  it('matches Japanese full-name aliases alongside the English surname', () => {
+    const result = linkAuthors(
+      ['小林秀太', '小林 秀太', 'Shuta Kobayashi', '伊藤創祐', '小林秀太郎'],
+      {},
+      'Kobayashi',
+      ['小林秀太'],
+    );
+    expect(result.map((author) => author.isSelf)).toEqual([true, true, true, false, false]);
+    expect(result[1].name).toBe('小林 秀太');
+  });
+
+  it('does not match an empty or absent alias', () => {
+    expect(linkAuthors(['小林秀太'], {}, 'Kobayashi')[0].isSelf).toBe(false);
+    expect(linkAuthors([''], {}, '', [' '])[0].isSelf).toBe(false);
+  });
   it('returns empty array for empty input', () => {
     expect(linkAuthors([], coauthors, 'Einstein')).toEqual([]);
   });

@@ -867,10 +867,10 @@
     border-bottom-style: solid;
     text-decoration: none;
   }
-  .publications ol.bibliography li .author > em {
-    border-bottom: 1px solid;
+  .self-author {
     font-style: normal;
-    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
   }
   .publications ol.bibliography li .periodical {
     color: var(--global-text-color-light);

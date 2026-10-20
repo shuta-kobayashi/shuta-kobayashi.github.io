@@ -278,6 +278,12 @@ Enable in frontmatter:
 
 ### Presentations
 
+Set `site.presentations.authorAliases` to alternate full names for author underlining
+(for example, `['小林秀太']`). These match complete names, ignoring whitespace;
+English surname matching continues to use `site.publications.authorLastName`.
+Set `site.presentations.highlightAuthorAliases` to `false` to disable alias matching.
+Author lists accept standard BibTeX `and` separators as well as Japanese `，` and `、`.
+
 The `/presentations/` page reuses the publications layout, year grouping, author
 highlighting and material links. Edit `src/data/presentations.bib` to add
 talks or posters; the file includes a commented example. It starts with no records.
@@ -357,11 +363,11 @@ The publication page groups entries by year, newest first. BibTeX is parsed at b
 
 ### Author highlighting and asset paths
 
-The publication list italicises **your name** in author lists. Configure in `site.ts`:
+The publication list underlines **your name** in author lists and publication detail pages. Configure in `site.ts`:
 
 ```typescript
 publications: {
-  /** Last name used to italicise your name in author lists.
+  /** Last name used to underline your name in author lists.
    *  Defaults to the last word of site.author.name — usually correct without setting. */
   authorLastName: undefined,   // e.g. 'Einstein' — omit to auto-derive
 
@@ -654,6 +660,11 @@ Announcement text here. HTML and Markdown are supported.
 ```
 
 Announcements appear on the About page (if `site.announcements.enabled: true`) and on the dedicated `/news` page.
+
+The header's `news` / `ニュース` links open `/news/` / `/ja/news/`, which list all
+non-hidden announcements in that language without a count limit. The homepage
+shows only the number configured by `site.announcements.limit`. Edit the menu
+links in `site.navbar.items` and `site.navbar.japaneseItems`.
 
 Set `site.announcements.localized` to `true` to filter announcements by the page
 language on both homepages and the full news lists. Existing files default to

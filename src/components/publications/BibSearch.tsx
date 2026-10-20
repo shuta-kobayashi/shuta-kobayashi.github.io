@@ -36,8 +36,9 @@ interface Props {
   groupByYear?: boolean;
   maxAuthorLimit?: number;
   showThumbnails?: boolean;
-  /** Last name to italicise in author lists (case-insensitive). */
+  /** Last name to underline in author lists (case-insensitive). */
   authorLastName?: string;
+  authorAliases?: readonly string[];
   /** Path prefix for publication preview images (relative to public/). */
   previewDir?: string;
   /** Path prefix for publication PDFs and supplements (relative to public/). */
@@ -67,6 +68,7 @@ function PublicationEntry({
   maxAuthorLimit = 3,
   showThumbnails = true,
   authorLastName = '',
+  authorAliases = [],
   previewDir = '/assets/img/publication_preview/',
   pdfDir = '/assets/pdf/',
   labels = {},
@@ -80,6 +82,7 @@ function PublicationEntry({
   maxAuthorLimit?: number;
   showThumbnails?: boolean;
   authorLastName?: string;
+  authorAliases?: readonly string[];
   previewDir?: string;
   pdfDir?: string;
   labels?: Labels;
@@ -138,9 +141,9 @@ function PublicationEntry({
 
   // Author links with coauthor URL and self-identification
   const authorLinks = useMemo(
-    () => linkAuthors(authorList, coauthors, authorLastName),
+    () => linkAuthors(authorList, coauthors, authorLastName, authorAliases),
 
-    [authorsRaw, authorLastName],
+    [authorsRaw, authorLastName, authorAliases, coauthors],
   );
   const visibleAuthorLinks = maxAuthorLimit ? authorLinks.slice(0, maxAuthorLimit) : authorLinks;
   const hiddenCount = authorLinks.length - visibleAuthorLinks.length;
@@ -194,7 +197,11 @@ function PublicationEntry({
             <div className="author">
               {visibleAuthorLinks.map((al, i) => {
                 const isLast = i === visibleAuthorLinks.length - 1 && hiddenCount === 0;
-                const nameEl = al.isSelf ? <em>{al.name}</em> : <>{al.name}</>;
+                const nameEl = al.isSelf ? (
+                  <span className="self-author">{al.name}</span>
+                ) : (
+                  <>{al.name}</>
+                );
                 return (
                   <span key={i}>
                     {al.url ? (
@@ -449,6 +456,7 @@ export function BibSearch({
   maxAuthorLimit = 3,
   showThumbnails = true,
   authorLastName = '',
+  authorAliases = [],
   previewDir = '/assets/img/publication_preview/',
   pdfDir = '/assets/pdf/',
   labels = {},
@@ -496,6 +504,7 @@ export function BibSearch({
                   maxAuthorLimit={maxAuthorLimit}
                   showThumbnails={showThumbnails}
                   authorLastName={authorLastName}
+                  authorAliases={authorAliases}
                   previewDir={previewDir}
                   pdfDir={pdfDir}
                   labels={labels}

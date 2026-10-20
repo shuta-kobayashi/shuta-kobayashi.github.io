@@ -67,7 +67,7 @@ export const site = {
         '京都大学大学院理学研究科の博士課程に在籍する小林秀太の個人ウェブサイト。非平衡統計力学、確率熱力学、機械学習を研究しています。',
       subtitle: '京都大学大学院 博士課程 / 非平衡統計力学 · 確率熱力学 · 機械学習',
       photoCaption: 'ボルツマン像、ウィーン · 2026年10月',
-      news: 'ニュース',
+      news: 'おしらせ',
     },
   },
 
@@ -169,6 +169,7 @@ export const site = {
       { label: 'ホーム', href: '/ja/' },
       { label: '論文', href: '/ja/publications/' },
       { label: '発表', href: '/ja/presentations/' },
+      { label: 'おしらせ', href: '/ja/news/' },
       { label: '経歴', href: '/ja/cv/' },
     ] as NavItem[],
     /** News section link label on the English homepage. */
@@ -188,6 +189,7 @@ export const site = {
       { label: 'about', href: '/' },
       { label: 'publications', href: '/publications/' },
       { label: 'presentations', href: '/presentations/' },
+      { label: 'news', href: '/news/' },
       { label: 'cv', href: '/cv/' },
     ] as NavItem[],
   },
@@ -332,9 +334,9 @@ export const site = {
     labels: {
       en: { title: 'News', description: 'News and announcements', empty: 'No announcements yet.' },
       ja: {
-        title: '活動報告とお知らせ',
-        description: '活動報告とお知らせ',
-        empty: 'お知らせはまだありません。',
+        title: 'おしらせ',
+        description: '活動報告とおしらせ',
+        empty: 'おしらせはまだありません。',
       },
     },
     /** Show news/announcements section on the about page. */
@@ -363,7 +365,7 @@ export const site = {
     /** Enable dark/light mode toggle in navbar. */
     darkmode: true,
     /** Enable ⌘K search. */
-    search: true,
+    search: false,
     /** Enable reading progress bar on blog posts. */
     progressBar: true,
     /** Show back-to-top button. */
@@ -489,7 +491,7 @@ export const site = {
     /** Enable thumbnail images for publications (if `preview` set in BibTeX). */
     thumbnails: true,
     /**
-     * Last name used to italicise your name in publication author lists.
+     * Last name used to underline your name in publication author lists.
      * Defaults to the last word of `site.author.name` when not set.
      * Override explicitly if your publications use a different name form.
      */
@@ -511,6 +513,10 @@ export const site = {
   // ─── Presentations ───────────────────────────────────────────────────────
 
   presentations: {
+    /** Also underline full-name aliases configured below. */
+    highlightAuthorAliases: true,
+    /** Alternate full names used for the site owner in presentation author lists. */
+    authorAliases: ['小林秀太'],
     /** Page title and heading for the presentation list. */
     title: 'presentations',
     /** Description used in page metadata. */

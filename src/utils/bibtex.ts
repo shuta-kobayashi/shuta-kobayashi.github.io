@@ -123,7 +123,8 @@ export function getAuthors(entry: BibEntry): string {
   const raw = entry.fields.author ?? '';
   if (!raw) return '';
   return raw
-    .split(/\s+and\s+/i)
+    .replace(/^"(.*)"$/s, '$1')
+    .split(/\s+and\s+|[，、]/i)
     .map((a) => {
       const trimmed = a.trim();
       // "Last, First" → "First Last"

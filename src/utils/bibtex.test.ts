@@ -169,6 +169,25 @@ describe('getBoolField', () => {
 });
 
 describe('getAuthors', () => {
+  it('separates Japanese authors written with full-width commas and wrapped quotes', () => {
+    const entry = {
+      type: 'inproceedings',
+      key: 'k',
+      fields: { author: '"Dechant Andreas，Hüpfl Jakob，小林秀太，伊藤創祐， Rotter Stefan"' },
+    };
+    expect(getAuthors(entry)).toBe(
+      'Dechant Andreas, Hüpfl Jakob, 小林秀太, 伊藤創祐, Rotter Stefan',
+    );
+  });
+
+  it('supports Japanese commas alongside standard BibTeX author separators', () => {
+    const entry = {
+      type: 'inproceedings',
+      key: 'k',
+      fields: { author: '小林秀太、伊藤創祐 and Dechant, Andreas' },
+    };
+    expect(getAuthors(entry)).toBe('小林秀太, 伊藤創祐, Andreas Dechant');
+  });
   it('returns a single author without comma as-is', () => {
     const entry = { type: 'article', key: 'k', fields: { author: 'John Smith' } };
     expect(getAuthors(entry)).toBe('John Smith');

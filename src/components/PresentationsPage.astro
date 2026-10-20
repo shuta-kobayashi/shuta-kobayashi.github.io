@@ -94,6 +94,9 @@ const groupedPresentations = groups.map((group) => ({
                   authorLastName={
                     publications.authorLastName ?? site.author.name.split(' ').pop() ?? ''
                   }
+                  authorAliases={
+                    presentations.highlightAuthorAliases ? presentations.authorAliases : []
+                  }
                   previewDir={withBase(publications.previewDir)}
                   pdfDir={withBase(publications.pdfDir)}
                   labels={{ ...publications.labels, ...presentations.labels }}
