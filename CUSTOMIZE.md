@@ -293,6 +293,15 @@ filename relative to `site.publications.pdfDir` or a full URL. `html` links the
 title to an external event page. Presentation entries do not create publication
 detail pages or appear in Selected Publications.
 
+Add `month = {9}` (or `{09}`, `sep`, `{September}`) alongside `year` to record
+the presentation month. With `site.presentations.sortByMonth: true`, entries in
+each conference/format group appear newest first by year and month. Missing,
+empty, or invalid months sort after known months in the same year; equal dates
+preserve file order. Set this flag to `false` to sort only by year.
+`site.presentations.showMonth: true` displays dates as `2026-09` when a valid
+month is present; otherwise only the year is shown. Set it to `false` to always
+display only the year. Both settings apply to English and Japanese pages.
+
 Presentations are grouped into International Conferences and Domestic Conferences
 (Japan), with a continuous list inside each section. Set
 `site.presentations.groupByYear` to `true` to add year headings. Set `keywords = {domestic}` for

@@ -1,6 +1,42 @@
 import { describe, expect, it } from 'vitest';
 
-import { getAuthors, getBoolField, getTitle, getVenue, getYear, parseBibtex } from './bibtex';
+import {
+  compareDateDescending,
+  getAuthors,
+  getBoolField,
+  getMonth,
+  getTitle,
+  getVenue,
+  getYear,
+  parseBibtex,
+} from './bibtex';
+
+describe('presentation dates', () => {
+  it.each(['9', '09', 'sep', 'September', 'SEP'])('recognizes month %s', (month) => {
+    expect(getMonth({ type: 'inproceedings', key: 'k', fields: { month } })).toBe(9);
+  });
+
+  it.each(['', '0', '13', '-1', '2.5', 'unknown', '9abc'])('ignores invalid month %s', (month) => {
+    expect(getMonth({ type: 'inproceedings', key: 'k', fields: { month } })).toBe(0);
+  });
+
+  it('sorts by year then month, with unknown months last and ties in file order', () => {
+    const entries = parseBibtex(`
+      @inproceedings{unknown, year = {2026}}
+      @inproceedings{older, year = {2025}, month = dec}
+      @inproceedings{spring, year = {2026}, month = {3}}
+      @inproceedings{fall, year = {2026}, month = sep}
+      @inproceedings{same-month, year = {2026}, month = {09}}
+    `);
+    expect(entries.sort(compareDateDescending).map((entry) => entry.key)).toEqual([
+      'fall',
+      'same-month',
+      'spring',
+      'unknown',
+      'older',
+    ]);
+  });
+});
 
 describe('parseBibtex', () => {
   it('parses a basic article entry', () => {

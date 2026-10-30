@@ -118,6 +118,36 @@ export function getYear(entry: BibEntry): number {
   return parseInt(entry.fields.year ?? '0', 10);
 }
 
+/** Get a numeric or English BibTeX month (1–12); missing/invalid months return 0. */
+export function getMonth(entry: BibEntry): number {
+  const value = (entry.fields.month ?? '').trim().toLowerCase();
+  if (/^\d{1,2}$/.test(value)) {
+    const month = Number(value);
+    return month >= 1 && month <= 12 ? month : 0;
+  }
+  const months = [
+    'january',
+    'february',
+    'march',
+    'april',
+    'may',
+    'june',
+    'july',
+    'august',
+    'september',
+    'october',
+    'november',
+    'december',
+  ];
+  const index = months.findIndex((month) => value === month || value === month.slice(0, 3));
+  return index + 1;
+}
+
+/** Sort newest first, placing undated months last within their year. */
+export function compareDateDescending(a: BibEntry, b: BibEntry): number {
+  return (getYear(b) || 0) - (getYear(a) || 0) || getMonth(b) - getMonth(a);
+}
+
 /** Get formatted authors string: "First Last, First Last, ..." */
 export function getAuthors(entry: BibEntry): string {
   const raw = entry.fields.author ?? '';

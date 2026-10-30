@@ -4,7 +4,7 @@ import { site } from '@config/site';
 import Page from '@layouts/Page.astro';
 import type { CoauthorMap } from '@utils/authors';
 import { withBase } from '@utils/base';
-import { getYear, parseBibtex } from '@utils/bibtex';
+import { compareDateDescending, getYear, parseBibtex } from '@utils/bibtex';
 import yaml from 'js-yaml';
 
 import coauthorsRaw from '../data/coauthors.yml?raw';
@@ -15,7 +15,9 @@ interface Props {
 }
 
 const { lang = 'en' } = Astro.props;
-const entries = parseBibtex(bibRaw).sort((a, b) => getYear(b) - getYear(a));
+const entries = parseBibtex(bibRaw).sort(
+  site.presentations.sortByMonth ? compareDateDescending : (a, b) => getYear(b) - getYear(a),
+);
 const coauthors = (yaml.load(coauthorsRaw) ?? {}) as CoauthorMap;
 const { presentations, publications } = site;
 const japanese = site.languages.japanese.presentations;
@@ -88,6 +90,7 @@ const groupedPresentations = groups.map((group) => ({
                 <BibSearch
                   client:load
                   entries={format.entries}
+                  showMonth={presentations.showMonth}
                   groupByYear={!presentations.groupByFormat && presentations.groupByYear}
                   maxAuthorLimit={publications.maxAuthorLimit}
                   showThumbnails={presentations.thumbnails}

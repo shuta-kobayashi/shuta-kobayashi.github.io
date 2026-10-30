@@ -513,6 +513,10 @@ export const site = {
   // ─── Presentations ───────────────────────────────────────────────────────
 
   presentations: {
+    /** Sort by year and month, newest first; unknown months go last within the year. */
+    sortByMonth: true,
+    /** Display YYYY-MM when a valid BibTeX month is provided. */
+    showMonth: true,
     /** Also underline full-name aliases configured below. */
     highlightAuthorAliases: true,
     /** Alternate full names used for the site owner in presentation author lists. */

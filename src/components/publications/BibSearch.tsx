@@ -7,6 +7,7 @@ import {
   getAuthors,
   getBoolField,
   getCleanBibtex,
+  getMonth,
   getTitle,
   getVenue,
   getYear,
@@ -34,6 +35,8 @@ interface Props {
   entries: BibEntry[];
   /** Show separate lists and headings for each year. */
   groupByYear?: boolean;
+  /** Include the BibTeX month in the displayed date. */
+  showMonth?: boolean;
   maxAuthorLimit?: number;
   showThumbnails?: boolean;
   /** Last name to underline in author lists (case-insensitive). */
@@ -65,6 +68,7 @@ function entryUrl(entry: BibEntry): string {
 
 function PublicationEntry({
   entry,
+  showMonth = false,
   maxAuthorLimit = 3,
   showThumbnails = true,
   authorLastName = '',
@@ -79,6 +83,7 @@ function PublicationEntry({
   badges,
 }: {
   entry: BibEntry;
+  showMonth?: boolean;
   maxAuthorLimit?: number;
   showThumbnails?: boolean;
   authorLastName?: string;
@@ -104,6 +109,8 @@ function PublicationEntry({
   const authorList = authorsRaw ? authorsRaw.split(', ') : [];
   const venue = getVenue(entry);
   const year = getYear(entry);
+  const month = showMonth ? getMonth(entry) : 0;
+  const date = year ? (month ? `${year}-${String(month).padStart(2, '0')}` : year) : '';
   const abstract = entry.fields.abstract ?? '';
   const doi = entry.fields.doi ?? '';
   const arxiv = entry.fields.arxiv ?? '';
@@ -234,12 +241,12 @@ function PublicationEntry({
             </div>
           )}
 
-          {/* Venue + year + additional_info */}
+          {/* Venue + date + additional_info */}
           {(venue || year) && (
             <div className="periodical">
               {venue && <em>{venue}</em>}
               {venue && year ? ', ' : ''}
-              {year || ''}
+              {date}
               {additionalInfo && <span style={{ marginLeft: '0.25rem' }}> · {additionalInfo}</span>}
             </div>
           )}
@@ -453,6 +460,7 @@ function PublicationEntry({
 export function BibSearch({
   entries,
   groupByYear = true,
+  showMonth = false,
   maxAuthorLimit = 3,
   showThumbnails = true,
   authorLastName = '',
@@ -501,6 +509,7 @@ export function BibSearch({
                 <PublicationEntry
                   key={entry.key}
                   entry={entry}
+                  showMonth={showMonth}
                   maxAuthorLimit={maxAuthorLimit}
                   showThumbnails={showThumbnails}
                   authorLastName={authorLastName}
