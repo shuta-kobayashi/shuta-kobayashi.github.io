@@ -67,7 +67,7 @@ export const site = {
         '京都大学大学院理学研究科の博士課程に在籍する小林秀太の個人ウェブサイト。非平衡統計力学、確率熱力学、機械学習を研究しています。',
       subtitle: '京都大学大学院 博士後期課程1年 / 非平衡統計力学 · 確率熱力学 · 機械学習',
       photoCaption: 'ボルツマン像、ウィーン · 2026年10月',
-      news: 'おしらせ',
+      news: 'ニュース',
     },
   },
 
@@ -330,13 +330,21 @@ export const site = {
   announcements: {
     /** Display announcements in the page language; false uses English on all pages. */
     localized: true,
-    /** Metadata and empty-state copy for each news page. */
+    /** Show a link to all news below the homepage announcements. */
+    showArchiveLink: true,
+    /** Metadata, empty-state copy, and homepage archive link labels for each language. */
     labels: {
-      en: { title: 'News', description: 'News and announcements', empty: 'No announcements yet.' },
+      en: {
+        title: 'News',
+        description: 'News and announcements',
+        empty: 'No announcements yet.',
+        archiveLink: 'View past news',
+      },
       ja: {
         title: 'おしらせ',
         description: '活動報告とおしらせ',
         empty: 'おしらせはまだありません。',
+        archiveLink: '過去のニュースはこちら',
       },
     },
     /** Show news/announcements section on the about page. */

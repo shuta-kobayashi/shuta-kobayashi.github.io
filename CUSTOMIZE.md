@@ -675,6 +675,11 @@ non-hidden announcements in that language without a count limit. The homepage
 shows only the number configured by `site.announcements.limit`. Edit the menu
 links in `site.navbar.items` and `site.navbar.japaneseItems`.
 
+Set `site.announcements.showArchiveLink` to `true` to show a link below the
+homepage announcements to the full news list in the same language. Customize its
+text with `site.announcements.labels.en.archiveLink` and
+`site.announcements.labels.ja.archiveLink`.
+
 Set `site.announcements.localized` to `true` to filter announcements by the page
 language on both homepages and the full news lists. Existing files default to
 `lang: en`. Add Japanese translations in `src/content/announcements/ja/` with
