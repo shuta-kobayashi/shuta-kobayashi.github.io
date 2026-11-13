@@ -122,7 +122,7 @@ export const site = {
   // Supported platforms (set to undefined to hide):
   //   email, x_username, linkedin_username, github_username, gitlab_username,
   //   scholar_userid, orcid_id, inspire_id, researchgate_username,
-  //   arxiv_id, youtube_id, instagram_username, mastodon_url,
+  //   arxiv_id, alphaxiv_url, youtube_id, instagram_username, mastodon_url,
   //   bluesky_handle, medium_username, cv_pdf, rss_icon
 
   socials: {
@@ -138,6 +138,10 @@ export const site = {
     inspire_id: undefined as string | undefined,
     researchgate_username: undefined as string | undefined,
     arxiv_id: 'kobayashi_s_1',
+    /** Full AlphaXiv profile URL. Set to undefined to hide its social link. */
+    alphaxiv_url: 'https://www.alphaxiv.org/@shuta-kobayashi' as string | undefined,
+    /** Accessible label and tooltip for the AlphaXiv social link. */
+    alphaxiv_label: 'AlphaXiv',
     youtube_id: undefined as string | undefined,
     instagram_username: undefined as string | undefined,
     mastodon_url: undefined as string | undefined,

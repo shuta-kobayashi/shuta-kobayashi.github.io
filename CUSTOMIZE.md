@@ -175,6 +175,8 @@ socials: {
   inspire_id: undefined,
   researchgate_username: undefined,
   arxiv_id: undefined,
+  alphaxiv_url: undefined,            // full AlphaXiv profile URL; undefined hides the link
+  alphaxiv_label: 'AlphaXiv',          // accessible label and tooltip
   youtube_id: undefined,
   instagram_username: undefined,
   mastodon_url: undefined,

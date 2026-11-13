@@ -19,6 +19,7 @@ import IconEnvelope from '~icons/fa-solid/envelope';
 import IconFilePdf from '~icons/fa-solid/file-pdf';
 import IconRss from '~icons/fa-solid/rss';
 
+import IconAlphaXiv from './icons/AlphaXiv.astro';
 import IconXTwitter from './icons/X.astro';
 
 interface Props {
@@ -103,6 +104,13 @@ if (s.arxiv_id) {
     href: `https://arxiv.org/a/${s.arxiv_id}.html`,
     label: 'arXiv',
     Icon: IconArxiv,
+  });
+}
+if (s.alphaxiv_url) {
+  links.push({
+    href: s.alphaxiv_url,
+    label: s.alphaxiv_label,
+    Icon: IconAlphaXiv,
   });
 }
 if (s.youtube_id) {
